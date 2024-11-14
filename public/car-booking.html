@@ -1,5 +1,5 @@
 <!-- Tabella per visualizzare l'elenco delle auto -->
-<table id="carsBooking">
+<table id="carsBookingTable">
     <thead>
         <tr>
             <th>ID Prenotazione</th>
@@ -64,7 +64,7 @@
         const response = await fetch(API_URL);
         const bookings = await response.json();
 
-        const tbody = document.querySelector('#bookingsTable tbody');
+        const tbody = document.querySelector('#carsBookingTable tbody');
         tbody.innerHTML = ''; // Svuota la tabella
 
         bookings.forEach(booking => {
