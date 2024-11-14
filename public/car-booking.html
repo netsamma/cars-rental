@@ -3,6 +3,7 @@
     <thead>
         <tr>
             <th>ID Prenotazione</th>
+            <th>Modello</th>
             <th>Nome Cliente</th>
             <th>Data Prenotazione</th>
             <th>Stato</th>
@@ -34,6 +35,10 @@
     }
     th {
       background-color: #f4f4f4;
+    }
+    .booked {
+      background-color: #4CAF50;
+      color: white;
     }
     .status-active {
       background-color: #4CAF50;
@@ -73,8 +78,11 @@
           // Imposta la classe di stato per colorare la cella in base allo stato
           let statusClass = '';
           switch (booking.status) {
+            case 'booked':
+              statusClass = 'status-booked'; 
+              break;
             case 'active':
-              statusClass = 'booked'; //status-active
+              statusClass = 'status-active'; 
               break;
             case 'completed':
               statusClass = 'status-completed';
@@ -88,6 +96,7 @@
 
           row.innerHTML = `
             <td>${booking._id}</td>
+            <td>${booking.carId.model}</td>
             <td>${booking.user}</td>
             <td>${new Date(booking.startTime).toLocaleDateString()}</td>
             <td class="${statusClass}">${booking.status}</td>
