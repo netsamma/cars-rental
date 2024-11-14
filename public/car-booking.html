@@ -1,0 +1,105 @@
+<!-- Tabella per visualizzare l'elenco delle auto -->
+<table id="carsBooking">
+    <thead>
+        <tr>
+            <th>ID Prenotazione</th>
+            <th>Nome Cliente</th>
+            <th>Data Prenotazione</th>
+            <th>Stato</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+      <!-- Le righe verranno inserite dinamicamente tramite JavaScript -->
+    </tbody>
+  </table>
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .status-active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .status-completed {
+      background-color: #2196F3;
+      color: white;
+    }
+    .status-cancelled {
+      background-color: #f44336;
+      color: white;
+    }
+    .actions button {
+      padding: 5px 10px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+  </style>
+
+
+<script>
+    const API_URL = 'https://server-node-igna.vercel.app/carsRental';
+
+    // Funzione per ottenere e visualizzare le prenotazioni
+    async function getBookings() {
+      try {
+        const response = await fetch(API_URL);
+        const bookings = await response.json();
+
+        const tbody = document.querySelector('#bookingsTable tbody');
+        tbody.innerHTML = ''; // Svuota la tabella
+
+        bookings.forEach(booking => {
+          const row = document.createElement('tr');
+
+          // Imposta la classe di stato per colorare la cella in base allo stato
+          let statusClass = '';
+          switch (booking.status) {
+            case 'active':
+              statusClass = 'booked'; //status-active
+              break;
+            case 'completed':
+              statusClass = 'status-completed';
+              break;
+            case 'cancelled':
+              statusClass = 'status-cancelled';
+              break;
+            default:
+              statusClass = '';
+          }
+
+          row.innerHTML = `
+            <td>${booking._id}</td>
+            <td>${booking.user}</td>
+            <td>${new Date(booking.startTime).toLocaleDateString()}</td>
+            <td class="${statusClass}">${booking.status}</td>
+            <td class="actions">
+              <button onclick="viewBooking('${booking._id}')">Visualizza</button>
+              <button onclick="cancelBooking('${booking._id}')">Annulla</button>
+            </td>
+          `;
+
+          tbody.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Errore nel recupero delle prenotazioni:", error);
+      }
+    }
