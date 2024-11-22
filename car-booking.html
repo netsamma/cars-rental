@@ -23,7 +23,8 @@
       <a href="/login">Login</a>
     </nav>
   </header>
-  
+
+  <!-- Lista prenotazioni -->
   <table id="carsBookingTable">
       <thead>
           <tr>
@@ -40,6 +41,23 @@
         <!-- Le righe verranno inserite dinamicamente tramite JavaScript -->
       </tbody>
     </table>  
+
+    <!-- Dettaglio prenotazione (modal) -->
+    <div class="modal" id="details-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Dettagli Prenotazione</h2>
+          <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> <span id="modal-id"></span></p>
+          <p><strong>Targa:</strong> <span id="modal-plate"></span></p>
+          <p><strong>Modello:</strong> <span id="modal-model"></span></p>
+          <p><strong>Data:</strong> <span id="modal-date"></span></p>
+          <p><strong>Stato:</strong> <span id="modal-status"></span></p>
+        </div>
+      </div>
+    </div>
   
 </body>
 </html>
@@ -60,7 +78,8 @@
 
         bookings.forEach(booking => {
           const row = document.createElement('tr');
-
+          console.log(booking);
+          
           // Imposta la classe di stato per colorare la cella in base allo stato
           let statusClass = '';
           switch (booking.status) {
@@ -87,7 +106,7 @@
             <td>${new Date(booking.startTime).toLocaleDateString()}</td>
             <td class="${statusClass}">${booking.status}</td>
             <td class="actions">
-              <button class="button-7" onclick="viewBooking('${booking._id}')">Visualizza</button>
+              <button class="button-7" data-booking='${JSON.stringify(booking)}' onclick="viewBooking(this)">Visualizza</button>
               <button class="button-8" onclick="cancelBooking('${booking._id}')">Annulla</button>
             </td>
             <td>
@@ -114,4 +133,30 @@
 
     // Richiama la funzione per caricare le prenotazioni quando la pagina viene caricata
     window.onload = getBookings;
+</script> 
+
+
+<script>
+  // Funzione per mostrare il modal con i dettagli
+  function viewBooking(button) {
+    const booking = JSON.parse(button.getAttribute('data-booking'));
+    console.log(booking);  
+    const formattedStartTime = new Date(booking.startTime).toLocaleDateString();
+    console.log("Data di inizio:", formattedStartTime);
+    
+    document.getElementById('modal-id').textContent = booking._id;
+    document.getElementById('modal-plate').textContent = booking.carId.plate;
+    document.getElementById('modal-model').textContent = booking.carId.model;
+    document.getElementById('modal-date').textContent = formattedStartTime;
+    document.getElementById('modal-status').textContent = booking.status;
+
+    const modal = document.getElementById('details-modal');
+    modal.style.display = 'flex';
+  }
+
+    // Funzione per chiudere il modal
+    function closeModal() {
+      const modal = document.getElementById('details-modal');
+      modal.style.display = 'none';
+    }
 </script>
