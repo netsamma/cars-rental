@@ -221,3 +221,9 @@ color: #ff9800;
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+#modal-map {
+  width: 100%;
+  height: 200px; /* Imposta l'altezza desiderata */
+  border: 1px solid #ccc; /* Opzionale, solo per visualizzare i confini */
+}
