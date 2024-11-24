@@ -19,6 +19,13 @@ th {
   background-color: #f4f4f4;
 }
 
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+tr:hover {
+  background-color: #d6d4d4;
+}
+
 .status-active {
   background-color: #4CAF50;
   color: white;

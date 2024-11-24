@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Taxi solidale</title>
   <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">  
-  <link rel="stylesheet" href="css/style.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="js/app.js"></script>
 </head>
@@ -28,39 +28,40 @@
 
   <!-- Lista prenotazioni -->
   <table id="carsBookingTable">
-      <thead>
-          <tr>
-              <th>ID Prenotazione</th>
-              <th>Modello</th>
-              <th>Nome Cliente</th>
-              <th>Data Prenotazione</th>
-              <th>Stato</th>
-              <th>Azioni</th>
-              <th>Azioni</th>
-          </tr>
-      </thead>
-      <tbody>
-        <!-- Le righe verranno inserite dinamicamente tramite JavaScript -->
-      </tbody>
-    </table>  
+    <thead>
+        <tr>
+            <th>ID Prenotazione</th>
+            <th>Modello</th>
+            <th>Nome Cliente</th>
+            <th>Data Prenotazione</th>
+            <th>Stato</th>
+            <th>Azioni</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+      <!-- Le righe verranno inserite dinamicamente tramite JavaScript -->
+    </tbody>
+  </table>  
 
-    <!-- Dettaglio prenotazione (modal) -->
-    <div class="modal" id="details-modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Dettagli Prenotazione</h2>
-          <button class="modal-close" onclick="closeModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p><strong>ID:</strong> <span id="modal-id"></span></p>
-          <p><strong>Targa:</strong> <span id="modal-plate"></span></p>
-          <p><strong>Modello:</strong> <span id="modal-model"></span></p>
-          <p><strong>Data:</strong> <span id="modal-date"></span></p>
-          <p><strong>Stato:</strong> <span id="modal-status"></span></p>
-          <div id="modal-map"></div>
-        </div>
+  <!-- Dettaglio prenotazione (modal) -->
+  <div class="modal" id="details-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Dettagli Prenotazione</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
+      <div class="modal-body">
+        <p><strong>ID:</strong> <span id="modal-id"></span></p>
+        <p><strong>Targa:</strong> <span id="modal-plate"></span></p>
+        <p><strong>Modello:</strong> <span id="modal-model"></span></p>
+        <p><strong>Data:</strong> <span id="modal-date"></span></p>
+        <p><strong>Stato:</strong> <span id="modal-status"></span></p>
+        <div id="modal-map"></div>
+        <!-- Le informazioni di dettaglio sono inserite dinamicamente -->
     </div>
+    </div>
+  </div>
   
 </body>
 </html>

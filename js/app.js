@@ -100,18 +100,14 @@ function closeModal() {
 	}
 }
 
-// Funzione per inizializzare la mappa
+
 function initMap(coordinates) {
-	
-	
 	const mapContainer = document.getElementById('modal-map');
 
-	console.log(mapContainer);
 	// Rimuove eventuali mappe esistenti
 	if (map) {
 		map.remove();
 	}
-
 	// Crea una nuova mappa
 	map = L.map(mapContainer).setView(coordinates, 13);
 
@@ -121,6 +117,16 @@ function initMap(coordinates) {
 
 	// Aggiunge un marker per la posizione del veicolo
 	L.marker(coordinates).addTo(map).bindPopup("Posizione Veicolo").openPopup();
+}
+
+function cancelBooking(id) {
+	// cancella la prenotazione
+	console.log(id);
+}
+
+function deleteRow(id){
+	// cancella la riga dal db
+	console.log(id);
 }
 
 // Richiama la funzione per caricare le prenotazioni quando la pagina viene caricata
