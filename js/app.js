@@ -67,25 +67,50 @@ async function getBookings() {
 
 // Funzione per mostrare il modal con i dettagli e la mappa
 function viewBooking(button) {
-	const booking = JSON.parse(button.getAttribute('data-booking'));
-	console.log(booking);  
-	const formattedStartTime = new Date(booking.startTime).toLocaleDateString();
-	console.log("Data di inizio:", formattedStartTime);
+    const booking = JSON.parse(button.getAttribute('data-booking'));
+    console.log(booking);  
+    const formattedStartTime = new Date(booking.startTime).toLocaleDateString();
+    console.log("Data di inizio:", formattedStartTime);
 
-	// Popola i dettagli nella modale
-	document.getElementById('modal-id').textContent = booking._id;
-	document.getElementById('modal-plate').textContent = booking.carId.plate;
-	document.getElementById('modal-model').textContent = booking.carId.model;
-	document.getElementById('modal-date').textContent = formattedStartTime;
-	document.getElementById('modal-status').textContent = booking.status;
+    // Popola i dettagli nella modale
+    document.getElementById('modal-id').textContent = booking._id;
+    document.getElementById('modal-plate').textContent = booking.carId.plate;
+    document.getElementById('modal-model').textContent = booking.carId.model;
+    document.getElementById('modal-date').textContent = formattedStartTime;
+    document.getElementById('modal-status').textContent = booking.status;
 
-	// Mostra la modale
-	const modal = document.getElementById('details-modal');
-	modal.style.display = 'flex';
+    // Mostra la modale
+    const modal = document.getElementById('details-modal');
+    modal.style.display = 'flex';
 
-	// Inizializza la mappa con le coordinate del veicolo
-	const coordinates = booking.location?.coordinates || [38.1157, 13.3615]; // Default: Palermo
-	initMap(coordinates);
+    // Recupera l'ID dell'auto
+    const carId = booking.carId._id;
+
+    // Recupera le coordinate dal server
+	// fetch(`https://server-node-igna.vercel.app/latestLocation/${carId}`)
+    fetch(`https://server-node-igna.vercel.app/latestLocation`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Errore nel recupero delle coordinate');
+            }
+            return response.json();
+        })
+        .then(location => {
+            console.log("Coordinate ricevute:", location);
+            // const coordinates = location.coordinates || [38.1157, 13.3615]; // Default: Palermo
+		
+			// Si deve modificare server API (restituire array? oppure mettere label 
+			// se si vuole restituire una sola coppia di coord)
+
+			// Converti latitude e longitude in un array di coordinate
+			const coordinates = [location.latitude, location.longitude];
+            initMap(coordinates);
+        })
+        .catch(error => {
+            console.error("Errore:", error);
+            // Mostra una mappa con una posizione predefinita in caso di errore
+            initMap([38.1157, 13.3615]);
+        });
 }
 
 // Funzione per chiudere il modal
@@ -110,14 +135,17 @@ function initMap(coordinates) {
 	}
 	// Crea una nuova mappa
 	map = L.map(mapContainer).setView(coordinates, 13);
+	map.setZoom(16);
 
 	L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+		maxZoom: 19,
 		attribution: "© OpenStreetMap contributors",
 	}).addTo(map);
 
 	// Aggiunge un marker per la posizione del veicolo
 	L.marker(coordinates).addTo(map).bindPopup("Posizione Veicolo").openPopup();
 }
+
 
 function cancelBooking(id) {
 	// cancella la prenotazione
