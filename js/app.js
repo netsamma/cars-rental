@@ -65,7 +65,7 @@ async function getBookings() {
 	}
 }
 
-// Funzione per mostrare il modal con i dettagli e la mappa
+// Funzione per visualizzare i dettagli della prenotazione
 function viewBooking(button) {
     const booking = JSON.parse(button.getAttribute('data-booking'));
     console.log(booking);  
@@ -86,9 +86,14 @@ function viewBooking(button) {
     // Recupera l'ID dell'auto
     const carId = booking.carId._id;
 
-    // Recupera le coordinate dal server
-	// fetch(`https://server-node-igna.vercel.app/latestLocation/${carId}`)
-    fetch(`https://server-node-igna.vercel.app/latestLocation`)
+    // Avvia l'aggiornamento della mappa ogni 5 secondi
+    updateMap(carId); // Aggiorna subito
+    setInterval(() => updateMap(carId), 5000); // Aggiorna ogni 5 secondi
+}
+
+// Funzione per recuperare l'ultima coordinata e aggiornare la mappa
+function updateMap(carId) {
+    fetch(`https://server-node-igna.vercel.app/latestLocation`) // /${carId}
         .then(response => {
             if (!response.ok) {
                 throw new Error('Errore nel recupero delle coordinate');
@@ -97,21 +102,17 @@ function viewBooking(button) {
         })
         .then(location => {
             console.log("Coordinate ricevute:", location);
-            // const coordinates = location.coordinates || [38.1157, 13.3615]; // Default: Palermo
-		
-			// Si deve modificare server API (restituire array? oppure mettere label 
-			// se si vuole restituire una sola coppia di coord)
-
-			// Converti latitude e longitude in un array di coordinate
-			const coordinates = [location.latitude, location.longitude];
+            const coordinates = [location.latitude, location.longitude];
             initMap(coordinates);
         })
         .catch(error => {
             console.error("Errore:", error);
             // Mostra una mappa con una posizione predefinita in caso di errore
-            initMap([38.1157, 13.3615]);
+            initMap([38.1157, 13.3615]); // Default: Palermo
         });
 }
+
+
 
 // Funzione per chiudere il modal
 function closeModal() {
@@ -143,7 +144,7 @@ function initMap(coordinates) {
 	}).addTo(map);
 
 	// Aggiunge un marker per la posizione del veicolo
-	L.marker(coordinates).addTo(map).bindPopup("Posizione Veicolo").openPopup();
+	L.marker(coordinates).addTo(map) // .bindPopup("Posizione Veicolo").openPopup();
 }
 
 
