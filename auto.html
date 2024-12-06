@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/auto.js"></script>
 </head>
 <body>
   
@@ -20,21 +20,19 @@
       <span>Taxi Solidale</span>
     </div>
     <nav>
-      <a href="/prenotazioni">Prenotazioni</a>
+      <a href="/">Prenotazioni</a>
       <a href="/auto.html">Auto</a>
       <a href="/login.html">Login</a>
     </nav>
   </header>
 
   <!-- Lista prenotazioni -->
-  <table id="carsBookingTable">
+  <table id="carsTable">
     <thead>
         <tr>
-            <th>ID Prenotazione</th>
             <th>Modello</th>
-            <th>Nome Cliente</th>
-            <th>Data Prenotazione</th>
-            <th>Stato</th>
+            <th>Targa</th>
+            <th>Disponibile</th>
             <th>Azioni</th>
             <th>Azioni</th>
         </tr>
@@ -48,17 +46,14 @@
   <div class="modal" id="details-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Dettagli Prenotazione</h2>
+        <h2>Dettagli Auto</h2>
         <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
       <div class="modal-body">
         <p><strong>ID:</strong> <span id="modal-id"></span></p>
         <p><strong>Targa:</strong> <span id="modal-plate"></span></p>
         <p><strong>Modello:</strong> <span id="modal-model"></span></p>
-        <p><strong>Data:</strong> <span id="modal-date"></span></p>
-        <p><strong>Stato:</strong> <span id="modal-status"></span></p>
-        <div id="modal-map"></div>
-        <!-- Le informazioni di dettaglio sono inserite dinamicamente -->
+        <p><strong>Disponibile:</strong> <span id="modal-status"></span></p>
     </div>
     </div>
   </div>
