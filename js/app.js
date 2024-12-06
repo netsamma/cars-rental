@@ -90,9 +90,9 @@ function viewBooking(button) {
     // Recupera l'ID dell'auto
     const carId = booking.carId._id;
 
-    // Avvia l'aggiornamento della mappa ogni 5 secondi
-    updateMap(carId); // Aggiorna subito
-    updateIntervalId = setInterval(() => updateMap(carId), 5000); // Aggiorna ogni 5 secondi
+    // Aggiorna la mappa ogni tot secondi
+    updateMap(carId); 
+    updateIntervalId = setInterval(() => updateMap(carId), 60000);
 }
 
 // Funzione per recuperare l'ultima coordinata e aggiornare la posizione del marker
