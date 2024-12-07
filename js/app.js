@@ -38,10 +38,12 @@ async function getBookings() {
             }
 
             row.innerHTML = `
-            <td class="small">${booking._id}</td>
             <td>${booking.carId.model}</td>
             <td>${booking.user}</td>
             <td>${new Date(booking.startTime).toLocaleDateString()}</td>
+            <td>${new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+            <td>${booking.pickup}</td>
+            <td>${booking.dropoff}</td>
             <td class="${statusClass}">${booking.status}</td>
             <td class="actions">
                 <button class="button-7" data-booking='${JSON.stringify(booking)}' onclick="viewBooking(this)">Visualizza</button>
@@ -72,15 +74,18 @@ async function getBookings() {
 // Funzione per visualizzare i dettagli della prenotazione
 function viewBooking(button) {
     const booking = JSON.parse(button.getAttribute('data-booking'));
-    console.log(booking);  
-    const formattedStartTime = new Date(booking.startTime).toLocaleDateString();
-    console.log("Data di inizio:", formattedStartTime);
+    const formattedDate = new Date(booking.startTime).toLocaleDateString();
+    const formattedStartTime = new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
     // Popola i dettagli nella modale
     document.getElementById('modal-id').textContent = booking._id;
     document.getElementById('modal-plate').textContent = booking.carId.plate;
     document.getElementById('modal-model').textContent = booking.carId.model;
-    document.getElementById('modal-date').textContent = formattedStartTime;
+    document.getElementById('modal-customer').textContent = booking.user;
+    document.getElementById('modal-date').textContent = formattedDate;
+    document.getElementById('modal-time').textContent = formattedStartTime;
+    document.getElementById('modal-pickup').textContent = booking.pickup;
+    document.getElementById('modal-dropoff').textContent = booking.dropoff;
     document.getElementById('modal-status').textContent = booking.status;
 
     // Mostra la modale

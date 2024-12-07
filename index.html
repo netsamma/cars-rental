@@ -30,10 +30,12 @@
   <table id="carsBookingTable">
     <thead>
         <tr>
-            <th>ID Prenotazione</th>
             <th>Modello</th>
             <th>Nome Cliente</th>
             <th>Data Prenotazione</th>
+            <th>Orario</th>
+            <th>Ind. partenza</th>
+            <th>Ind. arrivo</th>
             <th>Stato</th>
             <th>Azioni</th>
             <th>Azioni</th>
@@ -53,14 +55,17 @@
       </div>
       <div class="modal-body">
         <p><strong>ID:</strong> <span id="modal-id"></span></p>
-        <p><strong>Targa:</strong> <span id="modal-plate"></span></p>
-        <p><strong>Modello:</strong> <span id="modal-model"></span></p>
+        <p><strong>Cliente:</strong> <span id="modal-customer"></span></p>
         <p><strong>Data:</strong> <span id="modal-date"></span></p>
+        <p><strong>Orario:</strong> <span id="modal-time"></span></p>
+        <p><strong>Partenza:</strong> <span id="modal-pickup"></span></p>
+        <p><strong>Arrivo:</strong> <span id="modal-dropoff"></span></p>
+        <p><strong>Modello:</strong> <span id="modal-model"></span></p>
+        <p><strong>Targa:</strong> <span id="modal-plate"></span></p>
         <p><strong>Stato:</strong> <span id="modal-status"></span></p>
-        <div id="modal-map"></div>
-        <!-- Le informazioni di dettaglio sono inserite dinamicamente -->
     </div>
-    </div>
+    <div id="modal-map"></div>
+  </div>
   </div>
   
 </body>

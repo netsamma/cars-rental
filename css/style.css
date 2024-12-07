@@ -202,7 +202,7 @@ color: #ff9800;
   border-radius: 5px;
   padding: 20px;
   width: 90%;
-  max-width: 500px;
+  max-width: 60%;
   position: relative;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -219,10 +219,6 @@ color: #ff9800;
   margin: 0;
 }
 
-.modal-body {
-  margin: 20px 0;
-}
-
 .modal-close {
   background: none;
   border: none;
@@ -232,6 +228,17 @@ color: #ff9800;
 
 #modal-map {
   width: 100%;
-  height: 200px; /* Imposta l'altezza desiderata */
+  height: 300px; /* Imposta l'altezza desiderata */
   border: 1px solid #ccc; /* Opzionale, solo per visualizzare i confini */
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Due colonne uguali */
+  gap: 1rem; /* Spaziatura tra gli elementi */
+  margin: 10px;
+}
+
+.modal-body p{
+  margin: 0px
 }
