@@ -97,7 +97,7 @@ function viewBooking(button) {
 
 // Funzione per recuperare l'ultima coordinata e aggiornare la posizione del marker
 function updateMap(carId) {
-    fetch(`https://server-node-igna.vercel.app/latestLocation`) // /${carId}
+    fetch(`https://server-node-igna.vercel.app/latestLocation/?carId=${carId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Errore nel recupero delle coordinate');
