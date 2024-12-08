@@ -1,9 +1,10 @@
 const API_URL = 'https://server-node-igna.vercel.app/carsRental';
 
 // Variabili globali per la mappa
-let map; 
+let map;
 let marker;
 let updateIntervalId;
+let originalData = []; // Per mantenere l'ordine originale dei dati
 
 // Funzione per ottenere e visualizzare le prenotazioni
 async function getBookings() {
@@ -11,33 +12,39 @@ async function getBookings() {
         const response = await fetch(API_URL);
         const bookings = await response.json();
 
-        const tbody = document.querySelector('#carsBookingTable tbody');
-        tbody.innerHTML = ''; // Svuota la tabella
+        originalData = [...bookings]; // Salva una copia per ripristinare l'ordine originale
+        renderTable(bookings);
+    } catch (error) {
+        console.error("Errore nel recupero delle prenotazioni:", error);
+    }
+}
 
-        bookings.forEach(booking => {
-            const row = document.createElement('tr');
-            console.log(booking);
-            
-            // Imposta la classe di stato per colorare la cella in base allo stato
-            let statusClass = '';
-            switch (booking.status) {
-                case 'booked':
-                    statusClass = 'status-booked'; 
-                    break;
-                case 'active':
-                    statusClass = 'status-active'; 
-                    break;
-                case 'completed':
-                    statusClass = 'status-completed';
-                    break;
-                case 'cancelled':
-                    statusClass = 'status-cancelled';
-                    break;
-                default:
-                    statusClass = '';
-            }
+// Funzione per creare e popolare la tabella
+function renderTable(bookings) {
+    const tbody = document.querySelector('#carsBookingTable tbody');
+    tbody.innerHTML = ''; // Svuota la tabella
 
-            row.innerHTML = `
+    bookings.forEach(booking => {
+        const row = document.createElement('tr');
+        let statusClass = '';
+        switch (booking.status) {
+            case 'booked':
+                statusClass = 'status-booked';
+                break;
+            case 'active':
+                statusClass = 'status-active';
+                break;
+            case 'completed':
+                statusClass = 'status-completed';
+                break;
+            case 'cancelled':
+                statusClass = 'status-cancelled';
+                break;
+            default:
+                statusClass = '';
+        }
+
+        row.innerHTML = `
             <td>${booking.carId.model}</td>
             <td>${booking.user}</td>
             <td>${new Date(booking.startTime).toLocaleDateString()}</td>
@@ -51,33 +58,72 @@ async function getBookings() {
             </td>
             <td>
                 <div class="action-buttons">
-                <button class="btn btn-details" title="Details">
-                    <i class="fas fa-info-circle"></i>
-                </button>
-                <button class="btn btn-update" title="Update">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-delete" title="Delete">
-                    <i class="fas fa-trash"></i>
-                </button>
+                    <button class="btn btn-details" title="Details"><i class="fas fa-info-circle"></i></button>
+                    <button class="btn btn-update" title="Update"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
-            `;
-
-            tbody.appendChild(row);
-        });
-    } catch (error) {
-        console.error("Errore nel recupero delle prenotazioni:", error);
-    }
+        `;
+        tbody.appendChild(row);
+    });
 }
+
+// Funzione per ordinare la tabella
+function sortTable(columnIndex, sortOrder) {
+    const tbody = document.querySelector('#carsBookingTable tbody');
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+
+    rows.sort((a, b) => {
+        const cellA = a.cells[columnIndex].innerText.trim();
+        const cellB = b.cells[columnIndex].innerText.trim();
+
+        if (isNaN(Date.parse(cellA)) === false) {
+            return sortOrder === "asc"
+                ? new Date(cellA) - new Date(cellB)
+                : new Date(cellB) - new Date(cellA);
+        } else if (!isNaN(cellA) && !isNaN(cellB)) {
+            return sortOrder === "asc" ? cellA - cellB : cellB - cellA;
+        } else {
+            return sortOrder === "asc"
+                ? cellA.localeCompare(cellB)
+                : cellB.localeCompare(cellA);
+        }
+    });
+
+    tbody.innerHTML = '';
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+// Aggiunge l'evento click per l'ordinamento
+document.addEventListener("DOMContentLoaded", () => {
+    const table = document.getElementById("carsBookingTable");
+    const headers = table.querySelectorAll("thead th[data-sort]");
+
+    headers.forEach((header, index) => {
+        header.addEventListener("click", () => {
+            const currentSort = header.getAttribute("data-sort");
+            const newSort = currentSort === "asc" ? "desc" : currentSort === "desc" ? "none" : "asc";
+
+            headers.forEach(h => h.setAttribute("data-sort", "none")); // Resetta gli altri
+            header.setAttribute("data-sort", newSort);
+
+            if (newSort === "none") {
+                renderTable(originalData); // Ripristina l'ordine originale
+            } else {
+                sortTable(index, newSort);
+            }
+        });
+    });
+
+    getBookings(); // Carica i dati iniziali
+});
 
 // Funzione per visualizzare i dettagli della prenotazione
 function viewBooking(button) {
     const booking = JSON.parse(button.getAttribute('data-booking'));
     const formattedDate = new Date(booking.startTime).toLocaleDateString();
-    const formattedStartTime = new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    const formattedStartTime = new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    // Popola i dettagli nella modale
     document.getElementById('modal-id').textContent = booking._id;
     document.getElementById('modal-plate').textContent = booking.carId.plate;
     document.getElementById('modal-model').textContent = booking.carId.model;
@@ -88,17 +134,15 @@ function viewBooking(button) {
     document.getElementById('modal-dropoff').textContent = booking.dropoff;
     document.getElementById('modal-status').textContent = booking.status;
 
-    // Mostra la modale
     const modal = document.getElementById('details-modal');
     modal.style.display = 'flex';
 
-    // Recupera l'ID dell'auto
     const carId = booking.carId._id;
-
-    // Aggiorna la mappa ogni tot secondi
-    updateMap(carId); 
+    updateMap(carId);
     updateIntervalId = setInterval(() => updateMap(carId), 60000);
 }
+
+// Funzioni per aggiornare la mappa, chiudere il modal e altro rimangono invariate...
 
 // Funzione per recuperare l'ultima coordinata e aggiornare la posizione del marker
 function updateMap(carId) {
@@ -167,6 +211,3 @@ function deleteRow(id){
     // Cancella la riga dal db
     console.log(id);
 }
-
-// Richiama la funzione per caricare le prenotazioni quando la pagina viene caricata
-window.onload = getBookings;
