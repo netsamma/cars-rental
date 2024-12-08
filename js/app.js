@@ -74,14 +74,19 @@ function sortTable(columnIndex, sortOrder) {
     const rows = Array.from(tbody.querySelectorAll("tr"));
 
     rows.sort((a, b) => {
-        const cellA = a.cells[columnIndex].innerText.trim();
-        const cellB = b.cells[columnIndex].innerText.trim();
+        let cellA = a.cells[columnIndex].innerText.trim();
+        let cellB = b.cells[columnIndex].innerText.trim();
 
-        if (isNaN(Date.parse(cellA)) === false) {
-            return sortOrder === "asc"
-                ? new Date(cellA) - new Date(cellB)
-                : new Date(cellB) - new Date(cellA);
-        } else if (!isNaN(cellA) && !isNaN(cellB)) {
+        // Prova a convertire le celle in oggetti Date
+        const dateA = parseDate(cellA);
+        const dateB = parseDate(cellB);
+
+        if (dateA && dateB) {
+            return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+        }
+
+        // Se non sono date, confronta come stringhe o numeri
+        if (!isNaN(cellA) && !isNaN(cellB)) {
             return sortOrder === "asc" ? cellA - cellB : cellB - cellA;
         } else {
             return sortOrder === "asc"
@@ -90,9 +95,11 @@ function sortTable(columnIndex, sortOrder) {
         }
     });
 
+    // Ripopola la tabella con le righe ordinate
     tbody.innerHTML = '';
     rows.forEach(row => tbody.appendChild(row));
 }
+
 
 // Aggiunge l'evento click per l'ordinamento
 document.addEventListener("DOMContentLoaded", () => {
@@ -210,4 +217,13 @@ function cancelBooking(id) {
 function deleteRow(id){
     // Cancella la riga dal db
     console.log(id);
+}
+
+function parseDate(dateString) {
+    // Controlla se il formato è dd/MM/yyyy
+    if (dateString.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+        const [day, month, year] = dateString.split('/').map(Number);
+        return new Date(year, month - 1, day); // Crea l'oggetto Date
+    }
+    return null; // Ritorna null se il formato non è valido
 }
