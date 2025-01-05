@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="js/auto.js"></script>
 </head>
 <body>
   
@@ -27,12 +26,16 @@
   </header>
 
   <!-- Lista prenotazioni -->
-  <table id="carsTable">
+  <table id="carsBookingTable">
     <thead>
         <tr>
-            <th>Modello</th>
-            <th>Targa</th>
-            <th>Disponibile</th>
+            <th data-sort="none">Modello</th>
+            <th data-sort="none">Nome Cliente</th>
+            <th data-sort="none">Data Prenotazione</th>
+            <th data-sort="none">Orario</th>
+            <th data-sort="none">Ind. partenza</th>
+            <th data-sort="none">Ind. arrivo</th>
+            <th data-sort="none">Stato</th>
             <th>Azioni</th>
             <th>Azioni</th>
         </tr>
@@ -42,21 +45,30 @@
     </tbody>
   </table>  
 
-  <!-- Dettaglio prenotazione (modal) -->
-  <div class="modal" id="details-modal">
+  <!-- Dettaglio prenotazione (modal) funziona solo con app.js-->
+  <!-- <div class="modal" id="details-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Dettagli Auto</h2>
+        <h2>Dettagli Prenotazione</h2>
         <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
       <div class="modal-body">
         <p><strong>ID:</strong> <span id="modal-id"></span></p>
-        <p><strong>Targa:</strong> <span id="modal-plate"></span></p>
+        <p><strong>Cliente:</strong> <span id="modal-customer"></span></p>
+        <p><strong>Data:</strong> <span id="modal-date"></span></p>
+        <p><strong>Orario:</strong> <span id="modal-time"></span></p>
+        <p><strong>Partenza:</strong> <span id="modal-pickup"></span></p>
+        <p><strong>Arrivo:</strong> <span id="modal-dropoff"></span></p>
         <p><strong>Modello:</strong> <span id="modal-model"></span></p>
-        <p><strong>Disponibile:</strong> <span id="modal-status"></span></p>
+        <p><strong>Targa:</strong> <span id="modal-plate"></span></p>
+        <p><strong>Stato:</strong> <span id="modal-status"></span></p>
     </div>
-    </div>
+    <div id="modal-map"></div> -->
   </div>
-  
+  </div>
+
+  <script type="module" src="js/app-new.js"></script>
+  <!-- <script src="js/app.js"></script> -->
+
 </body>
 </html>
