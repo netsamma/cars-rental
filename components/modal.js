@@ -2,7 +2,7 @@
 
 import { createForm } from '../components/form.js';
 import { createMap } from './map.js';
-import { fetchLatestLocation } from '../js/api.js';
+import { fetchLatestLocation } from '../api/api.js';
 
 export async function openBookingModal(booking, isEditable) {
     const form = createForm(booking, isEditable);
@@ -24,13 +24,14 @@ export async function openBookingModal(booking, isEditable) {
             <div class="modal-header">
                 <h2>Dettagli Prenotazione</h2>
                 <button id="edit-button">Modifica</button>
-                <button id="save-button" style="display: none;">Salva</button>
+                <button id="save-button">Salva</button>
                 <button class="modal-close" class="modal-close">&times;</button>
             </div>
             <div id="modal-map"></div>
         </div>
     `;
     modal.querySelector('.modal-content').appendChild(form);
+    modal.querySelector('#save-button').disabled = true;
     document.body.appendChild(modal);
     
     try {
@@ -63,8 +64,8 @@ export function enableEdit(modal, form) {
     }
 
     // Cambia i pulsanti
-    modal.querySelector('#edit-button').style.display = 'none';
-    modal.querySelector('#save-button').style.display = 'inline-block';
+    modal.querySelector('#edit-button').disabled = true;
+    modal.querySelector('#save-button').disabled = false;
 }
 
 

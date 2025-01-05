@@ -1,9 +1,21 @@
 // js/api.js
-const API_URL = 'https://server-node-igna.vercel.app/carsRental';
+const API_URL_BOOKING = 'https://server-node-igna.vercel.app/carsRental';
+const API_URL_CARS = 'https://server-node-igna.vercel.app/cars';
+
 
 export async function fetchBookings() {
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL_BOOKING);
+        return await response.json();
+    } catch (error) {
+        console.error('Errore nel recupero delle prenotazioni:', error);
+        throw error;
+    }
+}
+
+export async function fetchCars() {
+    try {
+        const response = await fetch(API_URL_CARS);
         return await response.json();
     } catch (error) {
         console.error('Errore nel recupero delle prenotazioni:', error);

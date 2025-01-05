@@ -25,6 +25,58 @@ export function renderTable(bookings) {
     });
 }
 
+export function renderTableGeneral(data, tableId, columns) {
+    console.log(columns);
+    
+    const table = document.querySelector(`#${tableId}`);
+    const tbody = table.querySelector('tbody');
+    tbody.innerHTML = ''; // Pulisce la tabella
+
+    // Crea le intestazioni dinamicamente
+    const thead = table.querySelector('thead');
+    thead.innerHTML = ''; // Pulisce l'intestazione
+    const headerRow = document.createElement('tr');
+    columns.forEach(col => {
+        const th = document.createElement('th');
+        th.innerText = col.header;
+        headerRow.appendChild(th);
+    });
+    const th = document.createElement('th');
+    th.innerText = "Azioni";
+    headerRow.appendChild(th);
+
+    thead.appendChild(headerRow);
+
+    // Aggiungi le righe della tabella
+    data.forEach(item => {
+        const row = document.createElement('tr');
+
+        columns.forEach(col => {
+            const td = document.createElement('td');
+            if (col.type === 'date') {
+                td.innerText = new Date(item[col.field]).toLocaleDateString();
+            } else if (col.type === 'time') {
+                td.innerText = new Date(item[col.field]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            } else {
+                td.innerText = item[col.field] || ''; // Visualizza il valore del campo
+            }
+            row.appendChild(td);
+        });
+
+        // Aggiungi il pulsante di visualizzazione per ogni riga
+        const viewButtonTd = document.createElement('td');
+        const viewButton = document.createElement('button');
+        viewButton.classList.add('btn-view');
+        viewButton.innerText = 'Visualizza';
+        viewButton.addEventListener('click', () => openBookingModal(item, false)); // Apertura modale per visualizzare
+        viewButtonTd.appendChild(viewButton);
+        row.appendChild(viewButtonTd);
+
+        tbody.appendChild(row);
+    });
+}
+
+
 // Funzione per ordinare la tabella
 export function sortTable(columnIndex, sortOrder) {
     const tbody = document.querySelector('#carsBookingTable tbody');

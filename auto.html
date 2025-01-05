@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="js/auto.js"></script>
 </head>
 <body>
   
@@ -29,21 +28,13 @@
   <!-- Lista prenotazioni -->
   <table id="carsTable">
     <thead>
-        <tr>
-            <th>Modello</th>
-            <th>Targa</th>
-            <th>Disponibile</th>
-            <th>Azioni</th>
-            <th>Azioni</th>
-        </tr>
     </thead>
     <tbody>
       <!-- Le righe verranno inserite dinamicamente tramite JavaScript -->
     </tbody>
   </table>  
 
-  <!-- Dettaglio prenotazione (modal) -->
-  <div class="modal" id="details-modal">
+  <div class="modal" id="auto-details-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2>Dettagli Auto</h2>
@@ -55,8 +46,8 @@
         <p><strong>Modello:</strong> <span id="modal-model"></span></p>
         <p><strong>Disponibile:</strong> <span id="modal-status"></span></p>
     </div>
-    </div>
   </div>
-  
+  <script type="module" src="pages/auto.js"></script>
+  <!-- <script src="js/auto.js"></script> -->
 </body>
 </html>

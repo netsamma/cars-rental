@@ -1,4 +1,4 @@
-import { fetchBookings } from './api.js';
+import { fetchBookings } from '../api/api.js';
 import { renderTable, sortTable } from '../components/table.js';
 
 let originalData = [];
@@ -42,5 +42,3 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(error => console.error("Errore nel caricamento delle prenotazioni:", error));
 
 });
-
-
