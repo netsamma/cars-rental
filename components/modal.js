@@ -2,7 +2,7 @@
 
 import { createForm } from '../components/form.js';
 import { createMap } from './map.js';
-import { fetchLatestLocation } from '../api/api.js';
+import { fetchLatestLocation } from '../api.js';
 
 export async function openModal(data, isEditable) {
     const form = createForm(data, isEditable);

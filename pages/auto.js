@@ -1,4 +1,4 @@
-import { fetchCars }  from '../src/api/api.js';
+import { fetchCars }  from '../api.js';
 import { renderTable, sortTable } from '../components/table.js';
 
 let originalData = [];
