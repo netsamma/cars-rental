@@ -1,3 +1,47 @@
+import { fetchCars } from '../api/api.js';
+import { renderTable, sortTable } from '../components/table.js';
+
+let originalData = [];
+
+const columns = [
+    { header: 'Modello', field: 'model', type: 'string' },
+    { header: 'Targa', field: 'plate', type: 'string' },
+];
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const bookings = await fetchCars();
+        originalData = [...bookings];
+        renderTable(bookings, 'carsTable', columns);
+        console.log(bookings);
+    } catch (error) {
+        console.error("Errore nel recupero delle prenotazioni:", error);
+    }
+});
+
+// Aggiunge l'evento click per l'ordinamento
+document.addEventListener("DOMContentLoaded", () => {
+    const table = document.getElementById("carsTable");
+    const headers = table.querySelectorAll("thead th[data-sort]");
+    headers.forEach((header, index) => {
+        header.addEventListener("click", () => {
+            const currentSort = header.getAttribute("data-sort");
+            const newSort = currentSort === "asc" ? "desc" : currentSort === "desc" ? "none" : "asc";
+
+            headers.forEach(h => h.setAttribute("data-sort", "none")); // Resetta gli altri
+            header.setAttribute("data-sort", newSort);
+
+            if (newSort === "none") {
+                renderTable(originalData); // Ripristina l'ordine originale
+            } else {
+                sortTable(index, newSort);
+            }
+        });
+    });
+});
+
+
+
 // const API_URL = 'https://server-node-igna.vercel.app/cars';
 // // Variabili globali per la mappa
 // let map; 
@@ -73,49 +117,3 @@
 
 // // Richiama la funzione per caricare le prenotazioni quando la pagina viene caricata
 // window.onload = getCars;
-
-
-
-// Module
-
-import { fetchCars } from '../api/api.js';
-import { renderTableGeneral, sortTable } from '../components/table.js';
-
-let originalData = [];
-
-const columns = [
-    { header: 'Modello', field: 'model' },
-    { header: 'Targa', field: 'plate' },
-];
-
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const bookings = await fetchCars();
-        originalData = [...bookings];
-        renderTableGeneral(bookings, 'carsTable', columns);
-        console.log(bookings);
-    } catch (error) {
-        console.error("Errore nel recupero delle prenotazioni:", error);
-    }
-});
-
-// Aggiunge l'evento click per l'ordinamento
-document.addEventListener("DOMContentLoaded", () => {
-    const table = document.getElementById("carsTable");
-    const headers = table.querySelectorAll("thead th[data-sort]");
-    headers.forEach((header, index) => {
-        header.addEventListener("click", () => {
-            const currentSort = header.getAttribute("data-sort");
-            const newSort = currentSort === "asc" ? "desc" : currentSort === "desc" ? "none" : "asc";
-
-            headers.forEach(h => h.setAttribute("data-sort", "none")); // Resetta gli altri
-            header.setAttribute("data-sort", newSort);
-
-            if (newSort === "none") {
-                renderTable(originalData); // Ripristina l'ordine originale
-            } else {
-                sortTable(index, newSort);
-            }
-        });
-    });
-});

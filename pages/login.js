@@ -12,6 +12,6 @@ function validateLogin() {
 		errorMsg.textContent = '';
 		alert('Login effettuato con successo!');
 		// Qui puoi aggiungere il reindirizzamento o ulteriori azioni.
-		document.location.href="/prenotazioni.html";
+		document.location.href="pages/prenotazioni.html";
 	}
 }

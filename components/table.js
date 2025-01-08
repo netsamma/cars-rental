@@ -1,36 +1,9 @@
-// components/table.js
+import { openModal } from '../components/modal.js';
 
-import { openBookingModal } from '../components/modal.js';
-
-export function renderTable(bookings) {
-    const tbody = document.querySelector('#carsBookingTable tbody');
-    tbody.innerHTML = '';
-
-    bookings.forEach(booking => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${booking.carId.model}</td>
-            <td>${booking.user}</td>
-            <td>${new Date(booking.startTime).toLocaleDateString()}</td>
-            <td>${new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-            <td>${booking.pickup}</td>
-            <td>${booking.dropoff}</td>
-            <td>${booking.status}</td>
-            <td>
-                <button class="btn-view" data-id="${booking._id}">Visualizza</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-        row.querySelector('.btn-view').addEventListener('click', () => openBookingModal(booking, false));
-    });
-}
-
-export function renderTableGeneral(data, tableId, columns) {
-    console.log(columns);
-    
+export function renderTable(data, tableId, columns) {    
     const table = document.querySelector(`#${tableId}`);
     const tbody = table.querySelector('tbody');
-    tbody.innerHTML = ''; // Pulisce la tabella
+    tbody.innerHTML = '';
 
     // Crea le intestazioni dinamicamente
     const thead = table.querySelector('thead');
@@ -44,34 +17,43 @@ export function renderTableGeneral(data, tableId, columns) {
     const th = document.createElement('th');
     th.innerText = "Azioni";
     headerRow.appendChild(th);
-
     thead.appendChild(headerRow);
 
     // Aggiungi le righe della tabella
     data.forEach(item => {
+
         const row = document.createElement('tr');
 
         columns.forEach(col => {
             const td = document.createElement('td');
+            let nestedValue = getNestedValue(item, col.field);
+
             if (col.type === 'date') {
                 td.innerText = new Date(item[col.field]).toLocaleDateString();
             } else if (col.type === 'time') {
                 td.innerText = new Date(item[col.field]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             } else {
-                td.innerText = item[col.field] || ''; // Visualizza il valore del campo
+                td.innerText = nestedValue || '';
             }
             row.appendChild(td);
         });
 
         // Aggiungi il pulsante di visualizzazione per ogni riga
-        const viewButtonTd = document.createElement('td');
+        const actionTd = document.createElement('td');
+
         const viewButton = document.createElement('button');
         viewButton.classList.add('btn-view');
-        viewButton.innerText = 'Visualizza';
-        viewButton.addEventListener('click', () => openBookingModal(item, false)); // Apertura modale per visualizzare
-        viewButtonTd.appendChild(viewButton);
-        row.appendChild(viewButtonTd);
+        viewButton.innerHTML = '<i class="fas fa-info-circle"></i>';      
+        viewButton.addEventListener('click', () => openModal(item, false));
+        actionTd.appendChild(viewButton);
 
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('btn-delete');
+        deleteButton.innerHTML = ' <i class="fas fa-trash"></i>';      
+        deleteButton.addEventListener('click', () => deleteItem("netsam"));
+        actionTd.appendChild(deleteButton);
+
+        row.appendChild(actionTd);
         tbody.appendChild(row);
     });
 }
@@ -116,4 +98,35 @@ function parseDate(dateString) {
         return new Date(year, month - 1, day); // Crea l'oggetto Date
     }
     return null; // Ritorna null se il formato non è valido
+}
+
+
+// Funzione dinamica per ordinare colonne (supporto campi annidati json)
+export function sortTableDynamic(originalData, field, sortOrder, columns) {
+    const sortedData = [...originalData].sort((a, b) => {
+        let valueA = getNestedValue(a, field);
+        let valueB = getNestedValue(b, field);
+
+        // Gestione dei valori vuoti
+        if (valueA === undefined || valueA === null) return 1;
+        if (valueB === undefined || valueB === null) return -1;
+
+        // Ordinamento per tipo
+        if (typeof valueA === 'number' && typeof valueB === 'number') {
+            return sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
+        } else if (valueA instanceof Date && valueB instanceof Date) {
+            return sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
+        } else {
+            return sortOrder === 'asc' 
+                ? String(valueA).localeCompare(String(valueB)) 
+                : String(valueB).localeCompare(String(valueA));
+        }
+    });
+
+    renderTable(sortedData, 'carsBookingTable', columns);
+}
+
+// Funzione per accedere ai valori annidati
+function getNestedValue(obj, path) {
+    return path.split('.').reduce((acc, key) => acc?.[key], obj);
 }
