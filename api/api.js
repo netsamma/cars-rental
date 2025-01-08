@@ -18,7 +18,7 @@ export async function fetchCars() {
         const response = await fetch(API_URL_CARS);
         return await response.json();
     } catch (error) {
-        console.error('Errore nel recupero delle prenotazioni:', error);
+        console.error('Errore nel recupero delle auto:', error);
         throw error;
     }
 }
