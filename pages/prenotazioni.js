@@ -1,4 +1,4 @@
-import { fetchBookings } from '../api/api.js';
+import fetchBookings  from '../api/api.js';
 import { renderTable, sortTableDynamic } from '../components/table.js';
 
 let originalData = [];

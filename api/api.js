@@ -1,5 +1,6 @@
 // js/api.js
 const API_URL_BOOKING = 'https://server-node-igna.vercel.app/carsRental';
+// const API_URL_BOOKING = 'http://localhost:5000/carsRental';
 const API_URL_CARS = 'https://server-node-igna.vercel.app/cars';
 
 
