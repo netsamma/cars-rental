@@ -64,7 +64,7 @@ export function addMarker(map, coordinates, popupText = '') {
 
 
 // Funzione per recuperare l'ultima coordinata e aggiornare la posizione del marker
-function updateMap(carId) {
+export function updateMap(carId) {
     fetch(`https://server-node-igna.vercel.app/latestLocation/?carId=${carId}`)
         .then(response => {
             if (!response.ok) {

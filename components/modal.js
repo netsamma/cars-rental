@@ -1,8 +1,10 @@
 // components/modal.js
 
 import { createForm } from '../components/form.js';
-import { createMap } from './map.js';
+import { createMap, updateMap } from './map.js';
 import { fetchLatestLocation } from '../api.js';
+
+let updateIntervalId;
 
 export async function openModal(data, isEditable) {
     const form = createForm(data, isEditable);
@@ -37,6 +39,7 @@ export async function openModal(data, isEditable) {
     try {
         const location = await fetchLatestLocation(data.carId._id);
         createMap("modal-map",[location.latitude,location.longitude],16)
+        updateIntervalId = setInterval(() => updateMap(data.carId._id), 20000);
     } catch (error) {
         console.error('Errore durante il recupero della posizione:', error);
     } 
